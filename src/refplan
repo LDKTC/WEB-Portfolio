@@ -1,0 +1,12 @@
+สร้าง/เตรียม web portfolio โดยใช้ side navbar, white-darktone style และ minimal theme และควารู้สึกทันสมัย โดยมี tranlucent และ circle border เป็นหลัก
+ืnavbar มีรายละเอียดดังนี้
+    - Title "LDKTC", ใช้ฟอนต์ที่ให้ความโดดเด่นแต่ไม่โดดเกินไป
+    - Tab "Collection", default
+    - Tab "Project"
+    - Tab "About me"
+    - Tab "Resume"
+    - Tab "Social"
+แต่ละTab แสดงหน้าแยกกัน โดยจะสไลด์ transition เมื่อกดเปลี่ยนหน้า
+โดย หน้าตาของเว็บต้องเหมือน TechTablet จากอนาคต ที่มีnavbar เหมือน console menu และมี container เป็น display board
+
+ให้เตรียมหน้าเว็บไว้ก่อน
