@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0c10">
     <title>LDKTC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,10 +81,25 @@
         history.replaceState(null, '', '#' + t.dataset.tab);
       }));
 
+      // touch: swipe up/down to change tab (matches the vertical slide), unless the page itself scrolls
+      let touchY = null, touchX = 0;
+      const board = document.querySelector('.board');
+      board.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; touchX = e.touches[0].clientX; }, { passive: true });
+      board.addEventListener('touchend', e => {
+        if (touchY === null) return;
+        const dy = e.changedTouches[0].clientY - touchY;
+        const dx = e.changedTouches[0].clientX - touchX;
+        touchY = null;
+        const cur = pages.findIndex(p => p.classList.contains('active'));
+        const page = pages[cur];
+        if (Math.abs(dy) < 70 || Math.abs(dy) < Math.abs(dx) * 1.5 || page.scrollHeight > page.clientHeight + 1) return;
+        const next = cur + (dy < 0 ? 1 : -1);
+        if (next >= 0 && next < tabs.length) tabs[next].click();
+      }, { passive: true });
+
       // Collection is the default; honour a #hash if present.
       const start = tabs.findIndex(t => '#' + t.dataset.tab === location.hash);
       show(start < 0 ? 0 : start);
     </script>
-    <script src="js/hover.js"></script>
   </body>
 </html>
