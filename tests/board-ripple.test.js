@@ -1,5 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
 
 const { createRipple } = require('../js/board-ripple');
 
@@ -47,4 +49,11 @@ test('createRipple places an LED wave at the pointer and removes it after animat
   assert.equal(removed, true);
 
   global.document = previousDocument;
+});
+
+test('the ripple is behind page content and uses the LED dot colour', () => {
+  const css = readFileSync(join(__dirname, '..', 'page.css'), 'utf8');
+
+  assert.match(css, /\.led-ripple\s*\{[\s\S]*?z-index:\s*0;[\s\S]*?color-mix\(in srgb, hsl\(var\(--led-hue\) 80% 32%\) 70%, white\)/);
+  assert.match(css, /\.page\s*\{[\s\S]*?z-index:\s*1;/);
 });

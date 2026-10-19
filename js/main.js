@@ -54,3 +54,4 @@ board.addEventListener('click', event => {
 // Collection is the default; honour a #hash if present.
 const start = tabs.findIndex(tab => `#${tab.dataset.tab}` === location.hash);
 show(start < 0 ? 0 : start, false);
+Collection.initCollection();

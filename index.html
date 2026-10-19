@@ -28,10 +28,9 @@
         <section class="page" id="collection">
           <span class="tag">01 / Collection</span>
           <h2>Collection</h2>
-          <p>Selected works at a glance.</p>
-          <div class="cards">
-            <div class="card">ITEM 01</div><div class="card">ITEM 02</div>
-            <div class="card">ITEM 03</div><div class="card">ITEM 04</div>
+          <p>Selected works, grouped by collection.</p>
+          <div class="collection-gallery" id="collection-gallery" aria-live="polite">
+            <p class="collection-message">Loading collection…</p>
           </div>
         </section>
 
@@ -64,8 +63,22 @@
       </main>
     </div>
 
+    <dialog class="image-lightbox" id="image-lightbox" aria-label="Full-size collection image">
+      <button class="lightbox-close" type="button" data-close-lightbox aria-label="Close full image">×</button>
+      <div class="lightbox-carousel" id="lightbox-carousel">
+        <button class="lightbox-side lightbox-side-previous" type="button" data-lightbox-previous aria-label="Show previous image">
+          <img id="lightbox-previous-image" alt="">
+        </button>
+        <div class="lightbox-main"><img id="lightbox-image" alt=""></div>
+        <button class="lightbox-side lightbox-side-next" type="button" data-lightbox-next aria-label="Show next image">
+          <img id="lightbox-next-image" alt="">
+        </button>
+      </div>
+    </dialog>
+
     <script src="js/board-ripple.js"></script>
     <script src="js/board-transition.js"></script>
+    <script src="js/collection.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
