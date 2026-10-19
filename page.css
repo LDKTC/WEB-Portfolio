@@ -118,6 +118,7 @@ body {
     --dim: #e1e4ea;
     --accent: #7df9ff;
     --line: rgba(255, 255, 255, 0.18);
+    --led-shift-distance: 45px;
     text-shadow: 0 1px 8px rgba(0, 0, 0, .45);
     backdrop-filter: blur(6px) saturate(160%);
     -webkit-backdrop-filter: blur(6px) saturate(160%);
@@ -135,7 +136,25 @@ body {
     inherits: false;
     initial-value: 0;
 }
+@property --ripple-radius {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 8px;
+}
 @keyframes led-hue { to { --led-hue: 360; } }
+@keyframes led-dots-forward {
+    from { -webkit-mask-position: 0 var(--led-shift-distance), 0 0; mask-position: 0 var(--led-shift-distance), 0 0; opacity: .82; }
+    to { -webkit-mask-position: 0 0, 0 0; mask-position: 0 0, 0 0; opacity: .55; }
+}
+@keyframes led-dots-backward {
+    from { -webkit-mask-position: 0 calc(var(--led-shift-distance) * -1), 0 0; mask-position: 0 calc(var(--led-shift-distance) * -1), 0 0; opacity: .82; }
+    to { -webkit-mask-position: 0 0, 0 0; mask-position: 0 0, 0 0; opacity: .55; }
+}
+@keyframes led-ripple-wave {
+    0% { --ripple-radius: 8px; opacity: .96; }
+    68% { opacity: .58; }
+    100% { --ripple-radius: var(--ripple-max-radius); opacity: 0; }
+}
 
 .board::before {
     content: "";
@@ -148,16 +167,39 @@ body {
         radial-gradient(circle, #000 1.7px, transparent 2.2px),
         radial-gradient(ellipse closest-side at 50% 50%, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, .16) 62%, #000 100%);
     -webkit-mask-size: 9px 9px, 100% 100%;
+    -webkit-mask-position: 0 0, 0 0;
     -webkit-mask-composite: source-in;
     mask-image:
         radial-gradient(circle, #000 1.7px, transparent 2.2px),
         radial-gradient(ellipse closest-side at 50% 50%, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, .16) 62%, #000 100%);
     mask-size: 9px 9px, 100% 100%;
+    mask-position: 0 0, 0 0;
     mask-composite: intersect;
 }
 
+.board.led-shift-forward::before {
+    animation: led-hue 30s linear infinite, led-dots-forward .6s var(--ease);
+}
+.board.led-shift-backward::before {
+    animation: led-hue 30s linear infinite, led-dots-backward .6s var(--ease);
+}
+
+/* A click reveals a bright ring of the same LED matrix, expanding like a water drop. */
+.led-ripple {
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background-image: radial-gradient(circle, hsl(var(--led-hue) 100% 86%) 1.7px, transparent 2.2px);
+    background-size: 9px 9px;
+    mix-blend-mode: screen;
+    -webkit-mask-image: radial-gradient(circle at var(--ripple-x) var(--ripple-y), transparent 0 calc(var(--ripple-radius) - 18px), #000 calc(var(--ripple-radius) - 10px) calc(var(--ripple-radius) + 2px), transparent calc(var(--ripple-radius) + 12px));
+    mask-image: radial-gradient(circle at var(--ripple-x) var(--ripple-y), transparent 0 calc(var(--ripple-radius) - 18px), #000 calc(var(--ripple-radius) - 10px) calc(var(--ripple-radius) + 2px), transparent calc(var(--ripple-radius) + 12px));
+    animation: led-ripple-wave 1.05s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .board::before { animation: none; }
+    .board::before, .board.led-shift-forward::before, .board.led-shift-backward::before, .led-ripple { animation: none; }
+    .led-ripple { display: none; }
 }
 
 .page {

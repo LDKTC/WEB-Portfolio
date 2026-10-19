@@ -64,42 +64,8 @@
       </main>
     </div>
 
-    <script>
-      const tabs = [...document.querySelectorAll('.menu button')];
-      const pages = [...document.querySelectorAll('.page')];
-
-      function show(i) {
-        pages.forEach((p, n) => {
-          p.classList.toggle('active', n === i);
-          p.classList.toggle('before', n < i);
-        });
-        tabs.forEach((t, n) => n === i ? t.setAttribute('aria-current', 'page') : t.removeAttribute('aria-current'));
-      }
-
-      tabs.forEach((t, i) => t.addEventListener('click', () => {
-        show(i);
-        history.replaceState(null, '', '#' + t.dataset.tab);
-      }));
-
-      // touch: swipe up/down to change tab (matches the vertical slide), unless the page itself scrolls
-      let touchY = null, touchX = 0;
-      const board = document.querySelector('.board');
-      board.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; touchX = e.touches[0].clientX; }, { passive: true });
-      board.addEventListener('touchend', e => {
-        if (touchY === null) return;
-        const dy = e.changedTouches[0].clientY - touchY;
-        const dx = e.changedTouches[0].clientX - touchX;
-        touchY = null;
-        const cur = pages.findIndex(p => p.classList.contains('active'));
-        const page = pages[cur];
-        if (Math.abs(dy) < 70 || Math.abs(dy) < Math.abs(dx) * 1.5 || page.scrollHeight > page.clientHeight + 1) return;
-        const next = cur + (dy < 0 ? 1 : -1);
-        if (next >= 0 && next < tabs.length) tabs[next].click();
-      }, { passive: true });
-
-      // Collection is the default; honour a #hash if present.
-      const start = tabs.findIndex(t => '#' + t.dataset.tab === location.hash);
-      show(start < 0 ? 0 : start);
-    </script>
+    <script src="js/board-ripple.js"></script>
+    <script src="js/board-transition.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
